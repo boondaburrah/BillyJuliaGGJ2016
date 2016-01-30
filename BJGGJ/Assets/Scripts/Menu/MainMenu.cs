@@ -7,7 +7,7 @@ public class MainMenu : Singleton<MainMenu>
 {
 	public void OnButton_Play()
 	{
-
+		UnityEngine.SceneManagement.SceneManager.LoadScene("Controls Menu");
 	}
 	public void OnButton_Quit()
 	{

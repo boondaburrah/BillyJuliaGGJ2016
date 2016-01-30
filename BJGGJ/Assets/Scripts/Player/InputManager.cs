@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class InputManager : Singleton<InputManager>
 {
-	public static readonly int MaxPlayers = 4;
+	public static readonly int MaxPlayers = 5;
 
 
 	public Vector2[] MoveInput, TurnInput;
-	public bool[] TakePhotoInput;
+	public bool[] TakePhotoInput, JumpInput;
 
 	public float MouseSensitivity = 5.0f,
 				 GamepadSensitivity = 2.75f;
@@ -21,6 +21,7 @@ public class InputManager : Singleton<InputManager>
 		MoveInput = new Vector2[MaxPlayers];
 		TurnInput = new Vector2[MaxPlayers];
 		TakePhotoInput = new bool[MaxPlayers];
+		JumpInput = new bool[MaxPlayers];
 	}
 	void Update()
 	{
@@ -29,6 +30,7 @@ public class InputManager : Singleton<InputManager>
 			MoveInput[i] = Vector2.zero;
 			TurnInput[i] = Vector2.zero;
 			TakePhotoInput[i] = false;
+			JumpInput[i] = false;
 		}
 
 
@@ -52,6 +54,7 @@ public class InputManager : Singleton<InputManager>
 								   -Input.GetAxis("Mouse Y"));
 		TurnInput[0] *= MouseSensitivity;
 		TakePhotoInput[0] = Input.GetMouseButtonDown(0);
+		JumpInput[0] = Input.GetKeyDown(KeyCode.Space);
 
 
 		for (int i = 1; i < MaxPlayers; ++i)
@@ -65,6 +68,8 @@ public class InputManager : Singleton<InputManager>
 			TurnInput[i] *= GamepadSensitivity;
 
 			TakePhotoInput[i] = Input.GetButton("Fire " + i);
+
+			JumpInput[i] = Input.GetButton("Jump " + i);
 		}
 	}
 }

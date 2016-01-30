@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ using UnityEngine;
 
 public class ControlsMenu : Singleton<ControlsMenu>
 {
-	static List<int> PlayerControls = new List<int>();
+	public static List<int> PlayerControls = new List<int>();
 
 
 	public GameObject DoneButton;
@@ -44,19 +45,12 @@ public class ControlsMenu : Singleton<ControlsMenu>
 			{
 				if (!PlayerControls.Contains(i) &&
 					(InputManager.Instance.MoveInput[i] != Vector2.zero ||
-					 InputManager.Instance.TurnInput[i] != Vector2.zero ||
-					 InputManager.Instance.TakePhotoInput[i]))
+					 (i != 0 && InputManager.Instance.TurnInput[i] != Vector2.zero) ||
+					 InputManager.Instance.TakePhotoInput[i] ||
+					 InputManager.Instance.JumpInput[i]))
 				{
-					PlayerControls.Add(i);
-
-					if (PlayerControls.Count > 1)
-					{
-						DoneButton.SetActive(true);
-					}
-
-					GenerateInstructions();
-
 					timeLeft = TimeBetweenInputs;
+					StartCoroutine(AddPlayerCoroutine(i));
 
 					break;
 				}
@@ -67,5 +61,20 @@ public class ControlsMenu : Singleton<ControlsMenu>
 	private void GenerateInstructions()
 	{
 		InstructionsText.text = "Player " + (PlayerControls.Count + 1).ToString() + ": Press Input";
+	}
+
+	private IEnumerator AddPlayerCoroutine(int inputIndex)
+	{
+		//Wait a bit in case the player was just clicking a button.
+		yield return new WaitForSeconds(0.25f);
+		
+		PlayerControls.Add(inputIndex);
+
+		if (PlayerControls.Count > 1)
+		{
+			DoneButton.SetActive(true);
+		}
+
+		GenerateInstructions();
 	}
 }

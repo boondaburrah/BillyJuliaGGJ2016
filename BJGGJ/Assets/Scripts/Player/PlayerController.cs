@@ -23,11 +23,13 @@ public class PlayerController : MonoBehaviour
 	public Vector2 MoveInput { get { return InputManager.Instance.MoveInput[InputIndex]; } }
 	public Vector2 TurnInput { get { return InputManager.Instance.TurnInput[InputIndex]; } }
 	public bool IsShooting { get { return InputManager.Instance.TakePhotoInput[InputIndex]; } }
+	public bool IsJumping { get { return InputManager.Instance.JumpInput[InputIndex]; } }
 
 
 	public int InputIndex = 0;
 
 	public float MoveSpeed = 2.0f;
+	public float JumpSpeed = 10.0f;
 
 	public float Gravity = 5.0f;
 	public float GravitySpeed = 0.0f;
@@ -83,14 +85,20 @@ public class PlayerController : MonoBehaviour
 
 		//Gravity.
 
-		GravitySpeed += Time.deltaTime * Gravity;
+		GravitySpeed -= Time.deltaTime * Gravity;
 
-		Vector3 gravityDir = new Vector3(0.0f, GravitySpeed * -Time.deltaTime, 0.0f);
+		Vector3 gravityDir = new Vector3(0.0f, GravitySpeed * Time.deltaTime, 0.0f);
 		CollisionFlags hitResult = MyContr.Move(gravityDir);
 
 		if ((hitResult & CollisionFlags.Below) != CollisionFlags.None)
 		{
 			GravitySpeed = 0.0f;
+
+			//Jumping.
+			if (IsJumping)
+			{
+				GravitySpeed = JumpSpeed;
+			}
 		}
 	}
 
