@@ -23,7 +23,7 @@ public class ControlsMenu : Singleton<ControlsMenu>
 	}
 	public void OnButton_Done()
 	{
-		UnityEngine.SceneManagement.SceneManager.LoadScene("TestMat");
+		UnityEngine.SceneManagement.SceneManager.LoadScene("Match Scene");
 	}
 
 
