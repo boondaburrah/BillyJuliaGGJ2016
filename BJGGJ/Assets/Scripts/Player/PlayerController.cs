@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
 	[NonSerialized]
 	public List<Texture2D> Photos;
 	[NonSerialized]
-	public List<float> PhotoScore;
+	public List<float> PhotoScores;
 
 
 	void Awake()
@@ -55,6 +55,7 @@ public class PlayerController : MonoBehaviour
 		MyTr = transform;
 
 		Photos = new List<Texture2D>();
+		PhotoScores = new List<float>();
 
 		Players.Add(this);
 	}
@@ -152,7 +153,7 @@ public class PlayerController : MonoBehaviour
 				}
 			}
 		}
-		PhotoScore.Add(score);
+		PhotoScores.Add(score);
 
 
 		//Wait for the cooldown to finish, then reset.
