@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 79277592c098e8340840b13825426c34
 folderAsset: yes
 timeCreated: 1454124947
+=======
+guid: 7a64798aff730564e8d8aad9a1b5e215
+folderAsset: yes
+timeCreated: 1454121661
+>>>>>>> Treemesh
 licenseType: Free
 DefaultImporter:
   userData: 
