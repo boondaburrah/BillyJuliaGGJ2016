@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Shake : MonoBehaviour
 {
-	private static float[] randVals = new float[2] { 1231.1231f, 431.1231f, 6254.5135f },
-						   randVals2 = new float[2] { 423.123f, 71.234f, 986.128f };
+	private static float[] randVals = new float[3] { 1231.1231f, 431.1231f, 6254.5135f },
+						   randVals2 = new float[3] { 423.123f, 71.234f, 986.128f };
 
 	
 	public delegate void ShakeFinishedDelegate(Transform objTr);

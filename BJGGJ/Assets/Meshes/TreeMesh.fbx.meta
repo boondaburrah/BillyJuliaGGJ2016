@@ -1,0 +1,401 @@
+fileFormatVersion: 2
+guid: 5278e92306eae92488809ee410fa31b6
+timeCreated: 1454124947
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: TreeMesh1:group
+    100004: TreeMesh1:group1
+    100006: TreeMesh1:group2
+    100008: TreeMesh1:group3
+    100010: TreeMesh1:group4
+    100012: TreeMesh1:group5
+    100014: TreeMesh1:LeafBase
+    100016: TreeMesh1:LeafTop
+    100018: TreeMesh1:pasted__group
+    100020: TreeMesh1:pasted__group2
+    100022: TreeMesh1:pasted__pasted__pSphere1
+    100024: TreeMesh1:pasted__pasted__pSphere1 1
+    100026: TreeMesh1:pasted__pSphere1
+    100028: TreeMesh1:pasted__pSphere1 1
+    100030: TreeMesh1:pasted__pSphere1 2
+    100032: TreeMesh1:pasted__pSphere1 3
+    100034: TreeMesh1:pCylinder1
+    100036: TreeMesh1:pCylinder2
+    100038: TreeMesh1:polySurface1
+    100040: TreeMesh1:polySurface2
+    100042: TreeMesh1:polySurface3
+    100044: TreeMesh1:polySurface4
+    100046: TreeMesh1:polySurface4 1
+    100048: TreeMesh1:polySurface5
+    100050: TreeMesh1:polySurface6
+    100052: TreeMesh1:polySurface7
+    100054: TreeMesh1:polySurface8
+    100056: TreeMesh1:pSphere1
+    100058: TreeMesh1:Root
+    100060: TreeMesh1:transform1
+    100062: TreeMesh1:transform10
+    100064: TreeMesh1:transform11
+    100066: TreeMesh1:transform12
+    100068: TreeMesh1:transform13
+    100070: TreeMesh1:transform14
+    100072: TreeMesh1:transform15
+    100074: TreeMesh1:transform16
+    100076: TreeMesh1:transform17
+    100078: TreeMesh1:transform2
+    100080: TreeMesh1:transform3
+    100082: TreeMesh1:transform4
+    100084: TreeMesh1:transform5
+    100086: TreeMesh1:transform6
+    100088: TreeMesh1:transform7
+    100090: TreeMesh1:transform8
+    100092: TreeMesh1:transform9
+    100094: TreeMesh2:group
+    100096: TreeMesh2:group1
+    100098: TreeMesh2:group2
+    100100: TreeMesh2:group3
+    100102: TreeMesh2:group4
+    100104: TreeMesh2:group5
+    100106: TreeMesh2:LeafBase
+    100108: TreeMesh2:LeafTop
+    100110: TreeMesh2:pasted__group
+    100112: TreeMesh2:pasted__group2
+    100114: TreeMesh2:pasted__pasted__pSphere1
+    100116: TreeMesh2:pasted__pasted__pSphere1 1
+    100118: TreeMesh2:pasted__pSphere1
+    100120: TreeMesh2:pasted__pSphere1 1
+    100122: TreeMesh2:pasted__pSphere1 2
+    100124: TreeMesh2:pasted__pSphere1 3
+    100126: TreeMesh2:pCylinder1
+    100128: TreeMesh2:pCylinder2
+    100130: TreeMesh2:polySurface1
+    100132: TreeMesh2:polySurface2
+    100134: TreeMesh2:polySurface3
+    100136: TreeMesh2:polySurface4
+    100138: TreeMesh2:polySurface4 1
+    100140: TreeMesh2:polySurface5
+    100142: TreeMesh2:polySurface6
+    100144: TreeMesh2:polySurface7
+    100146: TreeMesh2:polySurface8
+    100148: TreeMesh2:pSphere1
+    100150: TreeMesh2:Root
+    100152: TreeMesh2:transform1
+    100154: TreeMesh2:transform10
+    100156: TreeMesh2:transform11
+    100158: TreeMesh2:transform12
+    100160: TreeMesh2:transform13
+    100162: TreeMesh2:transform14
+    100164: TreeMesh2:transform15
+    100166: TreeMesh2:transform16
+    100168: TreeMesh2:transform17
+    100170: TreeMesh2:transform2
+    100172: TreeMesh2:transform3
+    100174: TreeMesh2:transform4
+    100176: TreeMesh2:transform5
+    100178: TreeMesh2:transform6
+    100180: TreeMesh2:transform7
+    100182: TreeMesh2:transform8
+    100184: TreeMesh2:transform9
+    100186: group
+    100188: group1
+    100190: group2
+    100192: group3
+    100194: group4
+    100196: pasted__pSphere2
+    100198: pasted__pSphere2 1
+    100200: pasted__pSphere2 2
+    100202: pasted__pSphere2 3
+    100204: pasted__pSphere2 4
+    100206: pCube1
+    100208: polySurface1
+    100210: pSphere1
+    100212: pSphere2
+    100214: transform1
+    100216: transform2
+    100218: transform3
+    100220: transform4
+    100222: transform5
+    100224: transform6
+    100226: transform7
+    100228: transform8
+    100230: joint1
+    100232: joint2
+    100234: joint3
+    400000: //RootNode
+    400002: TreeMesh1:group
+    400004: TreeMesh1:group1
+    400006: TreeMesh1:group2
+    400008: TreeMesh1:group3
+    400010: TreeMesh1:group4
+    400012: TreeMesh1:group5
+    400014: TreeMesh1:LeafBase
+    400016: TreeMesh1:LeafTop
+    400018: TreeMesh1:pasted__group
+    400020: TreeMesh1:pasted__group2
+    400022: TreeMesh1:pasted__pasted__pSphere1
+    400024: TreeMesh1:pasted__pasted__pSphere1 1
+    400026: TreeMesh1:pasted__pSphere1
+    400028: TreeMesh1:pasted__pSphere1 1
+    400030: TreeMesh1:pasted__pSphere1 2
+    400032: TreeMesh1:pasted__pSphere1 3
+    400034: TreeMesh1:pCylinder1
+    400036: TreeMesh1:pCylinder2
+    400038: TreeMesh1:polySurface1
+    400040: TreeMesh1:polySurface2
+    400042: TreeMesh1:polySurface3
+    400044: TreeMesh1:polySurface4
+    400046: TreeMesh1:polySurface4 1
+    400048: TreeMesh1:polySurface5
+    400050: TreeMesh1:polySurface6
+    400052: TreeMesh1:polySurface7
+    400054: TreeMesh1:polySurface8
+    400056: TreeMesh1:pSphere1
+    400058: TreeMesh1:Root
+    400060: TreeMesh1:transform1
+    400062: TreeMesh1:transform10
+    400064: TreeMesh1:transform11
+    400066: TreeMesh1:transform12
+    400068: TreeMesh1:transform13
+    400070: TreeMesh1:transform14
+    400072: TreeMesh1:transform15
+    400074: TreeMesh1:transform16
+    400076: TreeMesh1:transform17
+    400078: TreeMesh1:transform2
+    400080: TreeMesh1:transform3
+    400082: TreeMesh1:transform4
+    400084: TreeMesh1:transform5
+    400086: TreeMesh1:transform6
+    400088: TreeMesh1:transform7
+    400090: TreeMesh1:transform8
+    400092: TreeMesh1:transform9
+    400094: TreeMesh2:group
+    400096: TreeMesh2:group1
+    400098: TreeMesh2:group2
+    400100: TreeMesh2:group3
+    400102: TreeMesh2:group4
+    400104: TreeMesh2:group5
+    400106: TreeMesh2:LeafBase
+    400108: TreeMesh2:LeafTop
+    400110: TreeMesh2:pasted__group
+    400112: TreeMesh2:pasted__group2
+    400114: TreeMesh2:pasted__pasted__pSphere1
+    400116: TreeMesh2:pasted__pasted__pSphere1 1
+    400118: TreeMesh2:pasted__pSphere1
+    400120: TreeMesh2:pasted__pSphere1 1
+    400122: TreeMesh2:pasted__pSphere1 2
+    400124: TreeMesh2:pasted__pSphere1 3
+    400126: TreeMesh2:pCylinder1
+    400128: TreeMesh2:pCylinder2
+    400130: TreeMesh2:polySurface1
+    400132: TreeMesh2:polySurface2
+    400134: TreeMesh2:polySurface3
+    400136: TreeMesh2:polySurface4
+    400138: TreeMesh2:polySurface4 1
+    400140: TreeMesh2:polySurface5
+    400142: TreeMesh2:polySurface6
+    400144: TreeMesh2:polySurface7
+    400146: TreeMesh2:polySurface8
+    400148: TreeMesh2:pSphere1
+    400150: TreeMesh2:Root
+    400152: TreeMesh2:transform1
+    400154: TreeMesh2:transform10
+    400156: TreeMesh2:transform11
+    400158: TreeMesh2:transform12
+    400160: TreeMesh2:transform13
+    400162: TreeMesh2:transform14
+    400164: TreeMesh2:transform15
+    400166: TreeMesh2:transform16
+    400168: TreeMesh2:transform17
+    400170: TreeMesh2:transform2
+    400172: TreeMesh2:transform3
+    400174: TreeMesh2:transform4
+    400176: TreeMesh2:transform5
+    400178: TreeMesh2:transform6
+    400180: TreeMesh2:transform7
+    400182: TreeMesh2:transform8
+    400184: TreeMesh2:transform9
+    400186: group
+    400188: group1
+    400190: group2
+    400192: group3
+    400194: group4
+    400196: pasted__pSphere2
+    400198: pasted__pSphere2 1
+    400200: pasted__pSphere2 2
+    400202: pasted__pSphere2 3
+    400204: pasted__pSphere2 4
+    400206: pCube1
+    400208: polySurface1
+    400210: pSphere1
+    400212: pSphere2
+    400214: transform1
+    400216: transform2
+    400218: transform3
+    400220: transform4
+    400222: transform5
+    400224: transform6
+    400226: transform7
+    400228: transform8
+    400230: joint1
+    400232: joint2
+    400234: joint3
+    2300000: TreeMesh1:polySurface4
+    2300002: TreeMesh2:polySurface4
+    2300004: polySurface1
+    3300000: TreeMesh1:polySurface4
+    3300002: TreeMesh2:polySurface4
+    3300004: polySurface1
+    4300000: TreeMesh1:polySurface4
+    4300002: TreeMesh2:polySurface4
+    4300004: polySurface1
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: TreeMesh1:polySurface4
+    13700002: TreeMesh2:polySurface4
+    13700004: polySurface1
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 24
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: group
+        weight: 1
+      - path: group/pasted__pSphere2
+        weight: 1
+      - path: group/pasted__pSphere2/transform3
+        weight: 1
+      - path: group1
+        weight: 1
+      - path: group1/pasted__pSphere2 1
+        weight: 1
+      - path: group1/pasted__pSphere2 1/transform2
+        weight: 1
+      - path: group2
+        weight: 1
+      - path: group2/pasted__pSphere2 2
+        weight: 1
+      - path: group2/pasted__pSphere2 2/transform6
+        weight: 1
+      - path: group3
+        weight: 1
+      - path: group3/pasted__pSphere2 3
+        weight: 1
+      - path: group3/pasted__pSphere2 3/transform1
+        weight: 1
+      - path: group4
+        weight: 1
+      - path: group4/pasted__pSphere2 4
+        weight: 1
+      - path: group4/pasted__pSphere2 4/transform5
+        weight: 1
+      - path: joint1
+        weight: 1
+      - path: joint1/joint2
+        weight: 1
+      - path: joint1/joint2/joint3
+        weight: 1
+      - path: pCube1
+        weight: 1
+      - path: pCube1/transform8
+        weight: 1
+      - path: polySurface1
+        weight: 1
+      - path: pSphere1
+        weight: 1
+      - path: pSphere1/transform7
+        weight: 1
+      - path: pSphere2
+        weight: 1
+      - path: pSphere2/transform4
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0.96
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 100
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
