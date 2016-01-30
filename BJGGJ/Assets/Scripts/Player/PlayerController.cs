@@ -39,13 +39,14 @@ public class PlayerController : MonoBehaviour
 	public Transform PhotoReticule;
 	public int RaycastsPerSide = 5;
 
+
+	[NonSerialized]
+	public bool CanTakePhotos = true;
+
 	[NonSerialized]
 	public List<Texture2D> Photos;
 	[NonSerialized]
 	public List<float> PhotoScore;
-
-
-	private float timeTillPhoto = 0.0f;
 
 
 	void Awake()
@@ -73,10 +74,8 @@ public class PlayerController : MonoBehaviour
 							(MoveInput.y * MakeHorz(MyTr.forward));
 		MyContr.Move(moveDelta * MoveSpeed * Time.deltaTime);
 		
-		timeTillPhoto -= Time.deltaTime;
-		if (IsShooting && timeTillPhoto <= 0.0f)
+		if (CanTakePhotos && IsShooting)
 		{
-			timeTillPhoto = PhotoInterval;
 			StartCoroutine(TakePhotoCoroutine());
 		}
 
@@ -97,6 +96,8 @@ public class PlayerController : MonoBehaviour
 
 	private IEnumerator TakePhotoCoroutine()
 	{
+		CanTakePhotos = false;
+
 		//Let the camera render a photo.
 		PhotoCam.enabled = true;
 		yield return null;
@@ -114,13 +115,16 @@ public class PlayerController : MonoBehaviour
 
 		Photos.Add(photo);
 		PhotoEffects.SetActive(true);
+		PhotoReticule.GetComponent<MeshRenderer>().material.SetTexture("_MainTex",
+																	   Art.Instance.DisabledReticule);
 
 
-		//Cast rays to see how exposed the target was.
+		//Cast rays to see how exposed the players are in the photo.
 
 		Vector3 centerPos = PhotoReticule.position,
 				up = PhotoReticule.up,
 				side = PhotoReticule.right;
+		Vector3 rayStart = PhotoCam.transform.position;
 		
 		float score = 0.0f,
 			  invNCasts = 1.0f / (float)(RaycastsPerSide * RaycastsPerSide);
@@ -128,16 +132,17 @@ public class PlayerController : MonoBehaviour
 		for (int x = 0; x < RaycastsPerSide; ++x)
 		{
 			float posX = ((float)x / (float)(RaycastsPerSide - 1)) - 0.5f;
+
 			for (int y = 0; y < RaycastsPerSide; ++y)
 			{
 				float posY = ((float)y / (float)(RaycastsPerSide - 1)) - 0.5f;
 
 				RaycastHit hit = new RaycastHit();
-				Physics.Raycast(new Ray(centerPos + (up * posY) + (side * posX),
-										PhotoReticule.forward),
-								out hit);
 
-				if (hit.collider != null)
+				Vector3 rayPoint = centerPos + (up * posY) + (side * posX);
+				Vector3 rayDir = (rayPoint - rayStart).normalized;
+
+				if (Physics.Raycast(new Ray(rayStart, rayDir), out hit))
 				{
 					PlayerController player = hit.collider.GetComponent<PlayerController>();
 					if (player != null && player != this)
@@ -148,5 +153,12 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 		PhotoScore.Add(score);
+
+
+		//Wait for the cooldown to finish, then reset.
+		yield return new WaitForSeconds(PhotoInterval);
+		CanTakePhotos = true;
+		PhotoReticule.GetComponent<MeshRenderer>().material.SetTexture("_MainTex",
+																	   Art.Instance.NormalReticle);
 	}
 }
