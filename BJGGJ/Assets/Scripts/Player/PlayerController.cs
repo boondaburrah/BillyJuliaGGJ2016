@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
 	public GameObject PhotoEffects;
 	public Transform PhotoReticule;
 	public int RaycastsPerSide = 5;
+	public LayerMask CameraRaycastLayers;
 
 
 	[NonSerialized]
@@ -129,10 +130,9 @@ public class PlayerController : MonoBehaviour
 
 
 		//Cast rays to see how exposed the players are in the photo.
-
 		Vector3 centerPos = PhotoReticule.position,
-				up = PhotoReticule.up,
-				side = PhotoReticule.right;
+				up = PhotoReticule.up * PhotoReticule.localScale.y,
+				side = PhotoReticule.right * PhotoReticule.localScale.x;
 		Vector3 rayStart = PhotoCam.transform.position;
 		
 		float score = 0.0f,
@@ -151,7 +151,8 @@ public class PlayerController : MonoBehaviour
 				Vector3 rayPoint = centerPos + (up * posY) + (side * posX);
 				Vector3 rayDir = (rayPoint - rayStart).normalized;
 
-				if (Physics.Raycast(new Ray(rayStart, rayDir), out hit))
+				if (Physics.Raycast(new Ray(rayStart, rayDir), out hit,
+									999999.0f, CameraRaycastLayers.value))
 				{
 					PlayerController player = hit.collider.GetComponent<PlayerController>();
 					if (player != null && player != this)
@@ -159,8 +160,11 @@ public class PlayerController : MonoBehaviour
 						score += invNCasts;
 					}
 				}
+
+				Debug.DrawRay(rayStart, rayDir, Color.red, 10.0f, true);
 			}
 		}
+		Debug.Log(score / invNCasts);
 		PhotoScores.Add(score);
 
 
