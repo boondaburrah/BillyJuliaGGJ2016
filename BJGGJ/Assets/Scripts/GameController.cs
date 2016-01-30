@@ -10,6 +10,29 @@ public class GameController : Singleton<GameController>
 	public static List<List<float>> PhotoScoresByPlayer;
 
 
+	public static Rect GetScreenRect(int player, int totalPlayers)
+	{
+		switch (totalPlayers)
+		{
+			case 2:
+				return new Rect(0.0f, player * 0.5f, 1.0f, 0.5f);
+			case 3:
+			case 4:
+				return new Rect((player % 2) * 0.5f,
+								(player / 2) * 0.5f,
+								0.5f, 0.5f);
+			case 5:
+			case 6:
+				return new Rect((player % 3) / 3.0f,
+								(player / 3) / 3.0f,
+								1.0f / 3.0f, 1.0f / 3.0f);
+
+			default:
+				throw new NotImplementedException("Unknown number of players: " + totalPlayers);
+		}
+	}
+
+
 	public GameObject[] PlayerPrefabs = new GameObject[5];
 	public Transform[] SpawnPoses = new Transform[5];
 
@@ -30,32 +53,7 @@ public class GameController : Singleton<GameController>
 			tr.forward = SpawnPoses[i].forward;
 
 			Camera c = tr.GetComponent<Camera>();
-
-			switch (ControlsMenu.PlayerControls.Count)
-			{
-				case 2:
-					c.rect = new Rect(0.0f, i * 0.5f, 1.0f, 0.5f);
-					break;
-
-				case 3:
-				case 4:
-					c.rect = new Rect((i % 2) * 0.5f,
-									  (i / 2) * 0.5f,
-									  0.5f, 0.5f);
-					break;
-
-				case 5:
-					c.rect = new Rect((i % 3) / 3.0f,
-									  (i / 3) / 3.0f,
-									  1.0f / 3.0f,
-									  1.0f / 3.0f);
-					break;
-
-				default:
-					throw new NotImplementedException("Unprepared for " +
-													  ControlsMenu.PlayerControls.Count +
-													  " players");
-			}
+			c.rect = GetScreenRect(i, ControlsMenu.PlayerControls.Count);
 		}
 	}
 
