@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
 	public Camera PhotoCam;
 	public GameObject PhotoEffects;
 	public Transform PhotoReticule;
+	public MeshRenderer PolaroidObj;
 	public int RaycastsPerSide = 5;
 	public LayerMask CameraRaycastLayers;
 
@@ -109,8 +110,9 @@ public class PlayerController : MonoBehaviour
 		CanTakePhotos = false;
 
 		//Let the camera render a photo.
-		PhotoCam.enabled = true;
+		PhotoCam.gameObject.SetActive(true);
 		yield return null;
+		PhotoCam.gameObject.SetActive(false);
 
 
 		//Capture it.
@@ -125,8 +127,13 @@ public class PlayerController : MonoBehaviour
 
 		Photos.Add(photo);
 		PhotoEffects.SetActive(true);
-		PhotoReticule.GetComponent<MeshRenderer>().material.SetTexture("_MainTex",
-																	   Art.Instance.DisabledReticule);
+
+
+		//Update GameObjects.
+
+		PhotoReticule.gameObject.SetActive(false);
+		PolaroidObj.gameObject.SetActive(true);
+		PolaroidObj.material.mainTexture = photo;
 
 
 		//Cast rays to see how exposed the players are in the photo.
@@ -168,7 +175,7 @@ public class PlayerController : MonoBehaviour
 		//Wait for the cooldown to finish, then reset.
 		yield return new WaitForSeconds(PhotoInterval);
 		CanTakePhotos = true;
-		PhotoReticule.GetComponent<MeshRenderer>().material.SetTexture("_MainTex",
-																	   Art.Instance.NormalReticle);
+		PhotoReticule.gameObject.SetActive(true);
+		PolaroidObj.gameObject.SetActive(false);
 	}
 }

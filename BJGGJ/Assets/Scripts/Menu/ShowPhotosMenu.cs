@@ -24,7 +24,7 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 
 	public GameObject PhotoPrefab;
 	public int NPhotosWide = 5;
-	public float PhotoSpacing = 10.0f;
+	public float PhotoSpacing = 2.5f;
 
 	private Canvas cv;
 
@@ -58,26 +58,43 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 
 			if (nPhotos > 0)
 			{
+				//Get the pixel-coordinates rectangle for this player's view.
 				Rect r = GameController.GetScreenRect(i, playerRects.Length);
 				r = new Rect(Mathf.Lerp(pixelR.xMin, pixelR.xMax, r.x),
 							 Mathf.Lerp(pixelR.yMin, pixelR.yMax, r.y),
 							 r.width * pixelR.width,
 							 r.height * pixelR.height);
 
-				float photoWidth = (r.width / (float)NPhotosWide) -
+
+				//Get the scale factor for the photos to fit.
+
+				int nPhotosWide = Mathf.Min(NPhotosWide, nPhotos);
+				float photoWidth = (r.width / (float)nPhotosWide) -
 								   ((nPhotos + 1) * PhotoSpacing);
 				float photoScale = photoWidth / (float)GameController.PhotosByPlayer[i][0].width;
 				float photoHeight = GameController.PhotosByPlayer[i][0].height * photoScale;
 
+				if (photoHeight > (r.height - PhotoSpacing - PhotoSpacing))
+				{
+					float scale = (r.height - PhotoSpacing - PhotoSpacing) / photoHeight;
+
+					photoWidth *= scale;
+					photoHeight *= scale;
+					photoScale *= scale;
+				}
+
 				
+				//Create and position each photo.
 				for (int j = 0; j < nPhotos; ++j)
 				{
 					GameObject photo = CreatePhoto(GameController.PhotosByPlayer[i][j],
 												   GameController.PhotoScoresByPlayer[i][j]);
+					photo.SetActive(false);
+
 					yield return null;
 
-					int pX = (j % NPhotosWide),
-						pY = (j / NPhotosWide);
+					int pX = (j % nPhotosWide),
+						pY = (j / nPhotosWide);
 					float x = PhotoSpacing + (pX * (PhotoSpacing + photoWidth)),
 						  y = PhotoSpacing + (pY * (PhotoSpacing + photoHeight));
 					
@@ -87,6 +104,7 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 					yield return null;
 					rectTr.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top,
 														 r.yMin + y, photoHeight);
+					photo.SetActive(true);
 
 					yield return new WaitForSeconds(0.2f);
 				}

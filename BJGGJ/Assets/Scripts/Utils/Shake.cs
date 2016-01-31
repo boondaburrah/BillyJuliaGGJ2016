@@ -17,6 +17,8 @@ public class Shake : MonoBehaviour
 																new Keyframe(1.0f, 0.0f));
 	public float ShakeTime = 0.5f;
 
+	public Vector3 PerAxisMultiplier = Vector3.one;
+
 
 	[NonSerialized]
 	public float TimeLeft;
@@ -52,11 +54,14 @@ public class Shake : MonoBehaviour
 		float t = 1.0f - (TimeLeft / ShakeTime);
 		float strength = StrengthOverTime.Evaluate(t);
 		Vector3 newShakeDelta = new Vector3(Mathf.Sin((Time.timeSinceLevelLoad * randVals[0]) +
-												randVals2[0]),
+													  randVals2[0]) *
+											PerAxisMultiplier.x,
 											Mathf.Cos((Time.timeSinceLevelLoad * randVals[1]) +
-												randVals2[1]),
+													  randVals2[1]) *
+											PerAxisMultiplier.y,
 											Mathf.Sin((Time.timeSinceLevelLoad * randVals[2]) +
-												randVals2[2]));
+													  randVals2[2]) *
+											PerAxisMultiplier.z);
 		newShakeDelta *= strength;
 
 		MyTr.position = (MyTr.position - shakeDelta) + newShakeDelta;
