@@ -129,6 +129,14 @@ public class GameController : Singleton<GameController>
 			Players.Add(tr.GetComponent<PlayerController>());
 			Players[i].InputIndex = ControlsMenu.PlayerControls[i];
 		}
+
+		Cursor.visible = false;
+	}
+	protected override void OnDestroy()
+	{
+		base.OnDestroy();
+		
+		Cursor.visible = true;
 	}
 
 	void Update()
@@ -151,13 +159,6 @@ public class GameController : Singleton<GameController>
 		{
 			oneMinuteWarning = true;
 			AudioSource.PlayClipAtPoint(Sounds.Instance.OneMinuteWarning, MultiAudioListener.Instance.MyTr.position);
-		}
-
-		if (Input.GetKeyDown(KeyCode.Alpha6))
-		{
-			foreach (PlayerController p in FindObjectsOfType<PlayerController>())
-				p.PhotoInterval = 0.1f;
-			TimeLeft = TimeSpan.FromSeconds(15.0f);
 		}
 	}
 

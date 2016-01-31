@@ -13,12 +13,12 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 		Transform cvTr = cv.transform;
 		Transform buttonTr = cvTr.GetChild(cvTr.childCount - 1);
 
-		buttonTr.parent = null;
+		buttonTr.SetParent(null, false);
 
 		GameObject photoGO = Instantiate(PhotoPrefab);
 		photoGO.transform.SetParent(cvTr, false);
 
-		buttonTr.SetParent(cvTr, true);
+		buttonTr.SetParent(cvTr, false);
 
 		photoGO.GetComponent<RawImage>().texture = photo;
 
@@ -95,7 +95,10 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 				//Get the scale factor for the photos to fit.
 
 				int nPhotosWide = Mathf.Min(NPhotosWide, nPhotos),
-					nPhotosTall = nPhotos / nPhotosWide;
+					nPhotosTall = (nPhotos / nPhotosWide) +
+									(nPhotos % nPhotosWide == 0 ?
+										0 :
+										1);
 				float photoWidth = (r.width - PhotoSpacing - (PhotoSpacing * nPhotosWide)) / (float)nPhotosWide;
 				float photoScale = photoWidth / (float)GameController.PhotosByPlayer[i][0].width;
 				float photoHeight = GameController.PhotosByPlayer[i][0].height * photoScale;
@@ -104,11 +107,9 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 				float fullYExtents = PhotoSpacing + (nPhotosTall * (photoHeight + PhotoSpacing));
 				if (fullYExtents > r.height)
 				{
-					float scale = r.height / fullYExtents;
-
-					photoWidth *= scale;
-					photoHeight *= scale;
-					photoScale *= scale;
+					photoHeight = (r.height - PhotoSpacing - (PhotoSpacing * nPhotosTall)) / (float)nPhotosTall;
+					photoScale = photoHeight / (float)GameController.PhotosByPlayer[i][0].height;
+					photoWidth = GameController.PhotosByPlayer[i][0].width * photoScale;
 
 					fullYExtents = PhotoSpacing + (nPhotosTall * (photoHeight + PhotoSpacing));
 				}
@@ -119,6 +120,7 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 				{
 					GameObject photo = CreatePhoto(GameController.PhotosByPlayer[i][j],
 												   GameController.PhotoScoresByPlayer[i][j]);
+					AudioSource.PlayClipAtPoint(Sounds.Instance.PhotoFlip, Vector3.zero);
 					photo.SetActive(false);
 
 					yield return null;
@@ -135,8 +137,6 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 					rectTr.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top,
 														 r.yMin + y, photoHeight);
 					photo.SetActive(true);
-
-					AudioSource.PlayClipAtPoint(Sounds.Instance.PhotoFlip, Vector3.zero);
 
 					yield return new WaitForSeconds(0.2f);
 				}
