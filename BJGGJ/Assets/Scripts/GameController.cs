@@ -163,13 +163,13 @@ public class GameController : Singleton<GameController>
 
 	void OnGUI()
 	{
-		string mins = TimeLeft.Minutes.ToString();
-		string secs = TimeLeft.Seconds.ToString();
-		string subSecs = (TimeLeft.Milliseconds / 100).ToString();
+		GUI.DrawTexture(new Rect(0.0f, 0.0f, Screen.width, Screen.height),
+						GetScreenDivider(ControlsMenu.PlayerControls.Count).texture);
+
+		string secs = ((int)(TimeLeft.TotalSeconds * 100.0f) / 100.0f).ToString();
 
 		GUI.Label(new Rect(Screen.width / 2.0f, 0.0f,
 						   0.5f, 0.5f),
-				  mins + ":" + secs + "." + subSecs,
-				  TextStyle);
+				  secs, TextStyle);
 	}
 }
