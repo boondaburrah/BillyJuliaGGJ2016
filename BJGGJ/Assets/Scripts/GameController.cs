@@ -90,6 +90,9 @@ public class GameController : Singleton<GameController>
 	
 	[NonSerialized]
 	public List<PlayerController> Players;
+	
+
+	private bool oneMinuteWarning = false;
 
 
 	void Start()
@@ -125,6 +128,12 @@ public class GameController : Singleton<GameController>
 			PhotoScoresByPlayer = Players.Select(p => p.PhotoScores).ToList();
 
 			UnityEngine.SceneManagement.SceneManager.LoadScene("Show Photos");
+		}
+
+		if (TimeLeft.TotalMinutes < 1.0 && !oneMinuteWarning)
+		{
+			oneMinuteWarning = true;
+			AudioSource.PlayClipAtPoint(Sounds.Instance.OneMinuteWarning, Vector3.zero);
 		}
 	}
 

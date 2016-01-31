@@ -76,6 +76,8 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 								   ((nPhotos + 1) * PhotoSpacing);
 				float photoScale = photoWidth / (float)GameController.PhotosByPlayer[i][0].width;
 				float photoHeight = GameController.PhotosByPlayer[i][0].height * photoScale;
+				
+				Debug.Log("Region: " + r + ", photos: " + nPhotos + ", original height: " + GameController.PhotosByPlayer[i][0].height + ", scale: " + photoScale + ", max height: " + (r.height - PhotoSpacing - PhotoSpacing));
 
 				if (photoHeight > (r.height - PhotoSpacing - PhotoSpacing))
 				{
@@ -84,6 +86,8 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 					photoWidth *= scale;
 					photoHeight *= scale;
 					photoScale *= scale;
+
+					Debug.Log("New height: " + photoHeight);
 				}
 
 				
