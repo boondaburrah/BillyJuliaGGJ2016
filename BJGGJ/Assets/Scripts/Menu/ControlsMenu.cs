@@ -38,6 +38,10 @@ public class ControlsMenu : Singleton<ControlsMenu>
 
 		GenerateInstructions();
 	}
+	void Start()
+	{
+		StartCoroutine(Sounds.Instance.FadeToMenuCoroutine());
+	}
 	void Update()
 	{
 		timeLeft -= Time.deltaTime;

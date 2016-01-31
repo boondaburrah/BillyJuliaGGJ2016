@@ -8,17 +8,21 @@ using UnityEngine.UI;
 
 public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 {
-	private GameObject CreatePhoto(Texture2D photo, float score)
+	private void PutObjectInCanvas(Transform tr)
 	{
 		Transform cvTr = cv.transform;
 		Transform buttonTr = cvTr.GetChild(cvTr.childCount - 1);
 
 		buttonTr.SetParent(null, false);
 
-		GameObject photoGO = Instantiate(PhotoPrefab);
-		photoGO.transform.SetParent(cvTr, false);
-
+		tr.SetParent(cvTr, false);
 		buttonTr.SetParent(cvTr, false);
+	}
+
+	private GameObject CreatePhoto(Texture2D photo, float score)
+	{
+		GameObject photoGO = Instantiate(PhotoPrefab);
+		PutObjectInCanvas(photoGO.transform);
 
 		photoGO.GetComponent<RawImage>().texture = photo;
 
@@ -28,15 +32,47 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 
 		return photoGO;
 	}
+	private GameObject CreateText(string _text, int fontSize)
+	{
+		GameObject go = new GameObject("Text");
+		Text txt = go.AddComponent<Text>();
+		txt.text = _text;
+		txt.font = TextFont;
+		txt.fontSize = fontSize;
+		txt.color = Color.white;
+		txt.alignment = TextAnchor.MiddleCenter;
+		txt.horizontalOverflow = HorizontalWrapMode.Overflow;
+		txt.verticalOverflow = VerticalWrapMode.Overflow;
+
+		PutObjectInCanvas(go.transform);
+
+		return go;
+	}
+	private GameObject CreateScore(float score, int fontSize)
+	{
+		return CreateText((Mathf.RoundToInt(score * 1000) / 10.0f).ToString(),
+						  fontSize);
+	}
 
 
-	public GameObject PhotoPrefab;
+	public GameObject PhotoPrefab, GreyBackdrop;
 	public int NPhotosWide = 5;
 	public float PhotoSpacing = 2.5f;
 
 	public Image DividerImg;
 
+	public Font TextFont;
+	public int BigFontSize = 50;
+
 	private Canvas cv;
+	private Rect GetCanvasSubRect(Rect lerpRect)
+	{
+		Rect pixelR = cv.pixelRect;
+		return new Rect(Mathf.Lerp(pixelR.xMin, pixelR.xMax, lerpRect.x),
+						Mathf.Lerp(pixelR.yMin, pixelR.yMax, lerpRect.y),
+						lerpRect.width * pixelR.width,
+						lerpRect.height * pixelR.height);
+	}
 
 
 	void Start()
@@ -45,6 +81,8 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 		StartCoroutine(RunSceneCoroutine());
 
 		DividerImg.sprite = GameController.GetScreenDivider(GameController.PhotosByPlayer.Count);
+		
+		StartCoroutine(Sounds.Instance.FadeToMenuCoroutine());
 	}
 
 
@@ -75,8 +113,6 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 
 		yield return null;
 
-		Rect pixelR = cv.pixelRect;
-
 		Rect[] playerRects = new Rect[GameController.PhotosByPlayer.Count];
 		for (int i = 0; i < playerRects.Length; ++i)
 		{
@@ -86,10 +122,7 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 			{
 				//Get the pixel-coordinates rectangle for this player's view.
 				Rect r = GameController.GetScreenRectFlipY(i, playerRects.Length);
-				r = new Rect(Mathf.Lerp(pixelR.xMin, pixelR.xMax, r.x),
-							 Mathf.Lerp(pixelR.yMin, pixelR.yMax, r.y),
-							 r.width * pixelR.width,
-							 r.height * pixelR.height);
+				r = GetCanvasSubRect(r);
 
 
 				//Get the scale factor for the photos to fit.
@@ -138,13 +171,52 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 														 r.yMin + y, photoHeight);
 					photo.SetActive(true);
 
-					yield return new WaitForSeconds(0.2f);
+					yield return new WaitForSeconds(0.35f);
 				}
 
 				yield return new WaitForSeconds(1.5f);
 			}
 		}
 
-		yield break;
+		yield return new WaitForSeconds(1.5f);
+
+		//Turn on the grey backdrop.
+		Transform backdropTr = GreyBackdrop.transform;
+		backdropTr.SetParent(null, false);
+		PutObjectInCanvas(backdropTr);
+		GreyBackdrop.SetActive(true);
+
+		yield return new WaitForSeconds(0.25f);
+
+		//Show the score for each player.
+		List<float> scores = GameController.PhotoScoresByPlayer.Select(l => l.Sum()).ToList();
+		int winner = 0;
+		for (int i = 0; i < scores.Count; ++i)
+		{
+			Rect r = GameController.GetScreenRect(i, GameController.PhotosByPlayer.Count);
+			r = GetCanvasSubRect(r);
+
+			Transform scoreNumber = CreateScore(scores[i], BigFontSize).transform;
+			scoreNumber.position = r.center;
+
+			if (scores[i] > scores[winner])
+				winner = i;
+			
+			AudioSource.PlayClipAtPoint(Sounds.Instance.PhotoFlip, Vector3.zero);
+
+			yield return new WaitForSeconds(1.0f);
+		}
+
+		yield return new WaitForSeconds(1.5f);
+
+		//Put the grey backdrop back in front.
+		backdropTr.SetParent(null, false);
+		PutObjectInCanvas(backdropTr);
+
+		//Show the winner.
+		Rect winnerRect = GetCanvasSubRect(GameController.GetScreenRect(winner, scores.Count));
+		CreateText("You win!", BigFontSize).transform.position = winnerRect.center;
+		
+		AudioSource.PlayClipAtPoint(Sounds.Instance.PhotoFlip, Vector3.zero);
 	}
 }

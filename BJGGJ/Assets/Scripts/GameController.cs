@@ -24,9 +24,9 @@ public class GameController : Singleton<GameController>
 								0.5f, 0.5f);
 			case 5:
 			case 6:
-				return new Rect((player % 3) / 3.0f,
-								(player / 3) / 3.0f,
-								1.0f / 3.0f,
+				return new Rect((player % 2) / 2.0f,
+								(player / 2) / 3.0f,
+								1.0f / 2.0f,
 								1.0f / 3.0f);
 
 			default:
@@ -46,9 +46,9 @@ public class GameController : Singleton<GameController>
 								0.5f, 0.5f);
 			case 5:
 			case 6:
-				return new Rect((player % 3) / 3.0f,
-								(2 - (player / 3)) / 3.0f,
-								1.0f / 3.0f,
+				return new Rect((player % 2) / 2.0f,
+								(2 - (player / 2)) / 3.0f,
+								1.0f / 2.0f,
 								1.0f / 3.0f);
 
 			default:
@@ -85,8 +85,8 @@ public class GameController : Singleton<GameController>
 								   0.0f);
 			case 5:
 			case 6:
-				return new Vector3(Mathf.Lerp(-1.0f, 1.0f, (float)(player % 3) / 2.0f),
-								   Mathf.Lerp(-1.0f, 1.0f, (float)(player / 3) / 2.0f),
+				return new Vector3(Mathf.Lerp(-1.0f, 1.0f, (float)(player % 2) / 2.0f),
+								   Mathf.Lerp(-1.0f, 1.0f, (float)(player / 2) / 3.0f),
 								   0.0f);
 
 			default:
@@ -104,12 +104,13 @@ public class GameController : Singleton<GameController>
 	
 	
 	public TimeSpan TimeLeft;
+	public float WarningTime = 10.0f;
 	
 	[NonSerialized]
 	public List<PlayerController> Players;
 	
 
-	private bool oneMinuteWarning = false;
+	private bool warnedYet = false;
 
 
 	void Start()
@@ -129,6 +130,8 @@ public class GameController : Singleton<GameController>
 			Players.Add(tr.GetComponent<PlayerController>());
 			Players[i].InputIndex = ControlsMenu.PlayerControls[i];
 		}
+		
+		StartCoroutine(Sounds.Instance.FadeToGameCoroutine());
 
 		Cursor.visible = false;
 	}
@@ -155,10 +158,17 @@ public class GameController : Singleton<GameController>
 			UnityEngine.SceneManagement.SceneManager.LoadScene("Show Photos");
 		}
 
-		if (TimeLeft.TotalMinutes < 1.0 && !oneMinuteWarning)
+		if (TimeLeft.TotalSeconds < WarningTime && !warnedYet)
 		{
-			oneMinuteWarning = true;
-			AudioSource.PlayClipAtPoint(Sounds.Instance.OneMinuteWarning, MultiAudioListener.Instance.MyTr.position);
+			warnedYet = true;
+			AudioSource.PlayClipAtPoint(Sounds.Instance.Warning, MultiAudioListener.Instance.MyTr.position);
+		}
+
+		if (Input.GetKeyDown(KeyCode.Alpha6))
+		{
+			foreach (PlayerController pc in FindObjectsOfType<PlayerController>())
+				pc.PhotoInterval = 0.1f;
+			TimeLeft = TimeSpan.FromSeconds(20.0f);
 		}
 	}
 

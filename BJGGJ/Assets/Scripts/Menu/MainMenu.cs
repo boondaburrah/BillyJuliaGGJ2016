@@ -15,4 +15,10 @@ public class MainMenu : Singleton<MainMenu>
 		AudioSource.PlayClipAtPoint(Sounds.Instance.UIClick, Vector3.zero);
 		Application.Quit();
 	}
+
+
+	void Start()
+	{
+		StartCoroutine(Sounds.Instance.FadeToMenuCoroutine());
+	}
 }

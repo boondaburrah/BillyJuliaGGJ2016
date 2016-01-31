@@ -157,6 +157,10 @@ public class PlayerController : MonoBehaviour
 			for (int y = 0; y < RaycastsPerSide; ++y)
 			{
 				float posY = ((float)y / (float)(RaycastsPerSide - 1)) - 0.5f;
+				//Stagger the casts a bit.
+				if (y % 2 == 0)
+					posX += 0.1f;
+				else posX -= 0.1f;
 
 				RaycastHit hit = new RaycastHit();
 
@@ -174,7 +178,17 @@ public class PlayerController : MonoBehaviour
 				}
 			}
 		}
-		PhotoScores.Add(score);
+
+		//If this wasn't a scoring photograph, remove it.
+		if (score == 0.0f)
+		{
+			Photos.RemoveAt(Photos.Count - 1);
+		}
+		//Otherwise, add the score to the total.
+		else
+		{
+			PhotoScores.Add(score);
+		}
 
 
 		//Wait for the cooldown to finish, then reset.
