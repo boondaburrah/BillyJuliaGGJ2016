@@ -10,8 +10,15 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 {
 	private GameObject CreatePhoto(Texture2D photo, float score)
 	{
+		Transform cvTr = cv.transform;
+		Transform buttonTr = cvTr.GetChild(cvTr.childCount - 1);
+
+		buttonTr.parent = null;
+
 		GameObject photoGO = Instantiate(PhotoPrefab);
-		photoGO.transform.SetParent(cv.transform, false);
+		photoGO.transform.SetParent(cvTr, false);
+
+		buttonTr.SetParent(cvTr, true);
 
 		photoGO.GetComponent<RawImage>().texture = photo;
 
@@ -27,6 +34,8 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 	public int NPhotosWide = 5;
 	public float PhotoSpacing = 2.5f;
 
+	public Image DividerImg;
+
 	private Canvas cv;
 
 
@@ -34,6 +43,8 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 	{
 		cv = FindObjectOfType<Canvas>();
 		StartCoroutine(RunSceneCoroutine());
+
+		DividerImg.sprite = GameController.GetScreenDivider(GameController.PhotosByPlayer.Count);
 	}
 
 
@@ -50,6 +61,18 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 
 	public System.Collections.IEnumerator RunSceneCoroutine()
 	{
+		DividerImg.gameObject.SetActive(false);
+		DividerImg.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left,
+															   0.0f,
+															   cv.pixelRect.width);
+
+		yield return null;
+		
+		DividerImg.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top,
+															   0.0f,
+															   cv.pixelRect.height);
+		DividerImg.gameObject.SetActive(true);
+
 		yield return null;
 
 		Rect pixelR = cv.pixelRect;
@@ -71,23 +94,23 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 
 				//Get the scale factor for the photos to fit.
 
-				int nPhotosWide = Mathf.Min(NPhotosWide, nPhotos);
-				float photoWidth = (r.width / (float)nPhotosWide) -
-								   ((nPhotos + 1) * PhotoSpacing);
+				int nPhotosWide = Mathf.Min(NPhotosWide, nPhotos),
+					nPhotosTall = nPhotos / nPhotosWide;
+				float photoWidth = (r.width - PhotoSpacing - (PhotoSpacing * nPhotosWide)) / (float)nPhotosWide;
 				float photoScale = photoWidth / (float)GameController.PhotosByPlayer[i][0].width;
 				float photoHeight = GameController.PhotosByPlayer[i][0].height * photoScale;
-				
-				Debug.Log("Region: " + r + ", photos: " + nPhotos + ", original height: " + GameController.PhotosByPlayer[i][0].height + ", scale: " + photoScale + ", max height: " + (r.height - PhotoSpacing - PhotoSpacing));
 
-				if (photoHeight > (r.height - PhotoSpacing - PhotoSpacing))
+				//Make sure they don't extend too far vertically.
+				float fullYExtents = PhotoSpacing + (nPhotosTall * (photoHeight + PhotoSpacing));
+				if (fullYExtents > r.height)
 				{
-					float scale = (r.height - PhotoSpacing - PhotoSpacing) / photoHeight;
+					float scale = r.height / fullYExtents;
 
 					photoWidth *= scale;
 					photoHeight *= scale;
 					photoScale *= scale;
 
-					Debug.Log("New height: " + photoHeight);
+					fullYExtents = PhotoSpacing + (nPhotosTall * (photoHeight + PhotoSpacing));
 				}
 
 				
@@ -112,6 +135,8 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 					rectTr.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top,
 														 r.yMin + y, photoHeight);
 					photo.SetActive(true);
+
+					AudioSource.PlayClipAtPoint(Sounds.Instance.PhotoFlip, Vector3.zero);
 
 					yield return new WaitForSeconds(0.2f);
 				}

@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Sounds : Singleton<Sounds>
 {
-	public AudioClip UIClick, TenSecondWarning, TakePhoto, OneMinuteWarning;
+	public AudioClip UIClick, TenSecondWarning,
+					 TakePhoto, OneMinuteWarning, PhotoFlip;
 
 
 	protected override void Awake()

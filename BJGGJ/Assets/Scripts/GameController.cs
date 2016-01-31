@@ -55,6 +55,23 @@ public class GameController : Singleton<GameController>
 				throw new NotImplementedException("Unknown number of players: " + totalPlayers);
 		}
 	}
+	public static Sprite GetScreenDivider(int totalPlayers)
+	{
+		switch (totalPlayers)
+		{
+			case 2:
+				return Art.Instance.PlayerDivider_2;
+			case 3:
+			case 4:
+				return Art.Instance.PlayerDivider_4;
+			case 5:
+			case 6:
+				return Art.Instance.PlayerDivider_6;
+
+			default:
+				throw new NotImplementedException("Unknown number of players: " + totalPlayers);
+		}
+	}
 	public static Vector3 GetSoundOffset(int player, int totalPlayers)
 	{
 		switch (totalPlayers)
@@ -133,7 +150,14 @@ public class GameController : Singleton<GameController>
 		if (TimeLeft.TotalMinutes < 1.0 && !oneMinuteWarning)
 		{
 			oneMinuteWarning = true;
-			AudioSource.PlayClipAtPoint(Sounds.Instance.OneMinuteWarning, Vector3.zero);
+			AudioSource.PlayClipAtPoint(Sounds.Instance.OneMinuteWarning, MultiAudioListener.Instance.MyTr.position);
+		}
+
+		if (Input.GetKeyDown(KeyCode.Alpha6))
+		{
+			foreach (PlayerController p in FindObjectsOfType<PlayerController>())
+				p.PhotoInterval = 0.1f;
+			TimeLeft = TimeSpan.FromSeconds(15.0f);
 		}
 	}
 
