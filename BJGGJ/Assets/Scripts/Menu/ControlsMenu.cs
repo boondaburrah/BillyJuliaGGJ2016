@@ -39,8 +39,13 @@ public class ControlsMenu : Singleton<ControlsMenu>
 	void Update()
 	{
 		timeLeft -= Time.deltaTime;
+
+
 		if (timeLeft <= 0.0f)
 		{
+			if (InputManager.Instance.JumpInput[2])
+				Debug.Log("Jump");
+
 			for (int i = 0; i < InputManager.MaxPlayers; ++i)
 			{
 				if (!PlayerControls.Contains(i) &&

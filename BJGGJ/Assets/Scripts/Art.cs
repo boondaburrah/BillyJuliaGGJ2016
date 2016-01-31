@@ -5,5 +5,4 @@ using UnityEngine;
 
 public class Art : Singleton<Art>
 {
-	public Texture2D NormalReticle, DisabledReticule;
 }
