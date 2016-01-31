@@ -160,11 +160,8 @@ public class PlayerController : MonoBehaviour
 						score += invNCasts;
 					}
 				}
-
-				Debug.DrawRay(rayStart, rayDir, Color.red, 10.0f, true);
 			}
 		}
-		Debug.Log(score / invNCasts);
 		PhotoScores.Add(score);
 
 
