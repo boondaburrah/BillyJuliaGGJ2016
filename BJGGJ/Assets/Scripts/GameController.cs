@@ -33,6 +33,66 @@ public class GameController : Singleton<GameController>
 				throw new NotImplementedException("Unknown number of players: " + totalPlayers);
 		}
 	}
+	public static Rect GetScreenRectFlipY(int player, int totalPlayers)
+	{
+		switch (totalPlayers)
+		{
+			case 2:
+				return new Rect(0.0f, (1 - player) * 0.5f, 1.0f, 0.5f);
+			case 3:
+			case 4:
+				return new Rect((player % 2) * 0.5f,
+								(1 - (player / 2)) * 0.5f,
+								0.5f, 0.5f);
+			case 5:
+			case 6:
+				return new Rect((player % 3) / 3.0f,
+								(2 - (player / 3)) / 3.0f,
+								1.0f / 3.0f,
+								1.0f / 3.0f);
+
+			default:
+				throw new NotImplementedException("Unknown number of players: " + totalPlayers);
+		}
+	}
+	public static Sprite GetScreenDivider(int totalPlayers)
+	{
+		switch (totalPlayers)
+		{
+			case 2:
+				return Art.Instance.PlayerDivider_2;
+			case 3:
+			case 4:
+				return Art.Instance.PlayerDivider_4;
+			case 5:
+			case 6:
+				return Art.Instance.PlayerDivider_6;
+
+			default:
+				throw new NotImplementedException("Unknown number of players: " + totalPlayers);
+		}
+	}
+	public static Vector3 GetSoundOffset(int player, int totalPlayers)
+	{
+		switch (totalPlayers)
+		{
+			case 2:
+				return new Vector3(0.0f, Mathf.Lerp(-1.0f, 1.0f, (float)player), 0.0f);
+			case 3:
+			case 4:
+				return new Vector3(Mathf.Lerp(-1.0f, 1.0f, player % 2),
+								   Mathf.Lerp(-1.0f, 1.0f, player / 2),
+								   0.0f);
+			case 5:
+			case 6:
+				return new Vector3(Mathf.Lerp(-1.0f, 1.0f, (float)(player % 3) / 2.0f),
+								   Mathf.Lerp(-1.0f, 1.0f, (float)(player / 3) / 2.0f),
+								   0.0f);
+
+			default:
+				throw new NotImplementedException("Unknown number of players: " + totalPlayers);
+		}
+	}
 
 
 	public GameObject[] PlayerPrefabs = new GameObject[5];
@@ -47,6 +107,9 @@ public class GameController : Singleton<GameController>
 	
 	[NonSerialized]
 	public List<PlayerController> Players;
+	
+
+	private bool oneMinuteWarning = false;
 
 
 	void Start()
@@ -64,7 +127,16 @@ public class GameController : Singleton<GameController>
 			c.rect = GetScreenRect(i, ControlsMenu.PlayerControls.Count);
 
 			Players.Add(tr.GetComponent<PlayerController>());
+			Players[i].InputIndex = ControlsMenu.PlayerControls[i];
 		}
+
+		Cursor.visible = false;
+	}
+	protected override void OnDestroy()
+	{
+		base.OnDestroy();
+		
+		Cursor.visible = true;
 	}
 
 	void Update()
@@ -82,17 +154,23 @@ public class GameController : Singleton<GameController>
 
 			UnityEngine.SceneManagement.SceneManager.LoadScene("Show Photos");
 		}
+
+		if (TimeLeft.TotalMinutes < 1.0 && !oneMinuteWarning)
+		{
+			oneMinuteWarning = true;
+			AudioSource.PlayClipAtPoint(Sounds.Instance.OneMinuteWarning, MultiAudioListener.Instance.MyTr.position);
+		}
 	}
 
 	void OnGUI()
 	{
-		string mins = TimeLeft.Minutes.ToString();
-		string secs = TimeLeft.Seconds.ToString();
-		string subSecs = (TimeLeft.Milliseconds / 100).ToString();
+		GUI.DrawTexture(new Rect(0.0f, 0.0f, Screen.width, Screen.height),
+						GetScreenDivider(ControlsMenu.PlayerControls.Count).texture);
+
+		string secs = ((int)(TimeLeft.TotalSeconds * 100.0f) / 100.0f).ToString();
 
 		GUI.Label(new Rect(Screen.width / 2.0f, 0.0f,
 						   0.5f, 0.5f),
-				  mins + ":" + secs + "." + subSecs,
-				  TextStyle);
+				  secs, TextStyle);
 	}
 }

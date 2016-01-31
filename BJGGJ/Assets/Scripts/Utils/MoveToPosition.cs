@@ -12,8 +12,9 @@ public class MoveToPosition : MonoBehaviour
 	public Vector3 EndPos;
 	public float TotalTime = 1.0f;
 	public AnimationCurve MovementCurve = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
+	public bool ReverseOnFinished = false;
 
-	public float T { get; private set; }
+	public float T { get; set; }
 
 	public Vector3 StartPos { get; private set; }
 	public Transform MyTr { get; private set; }
@@ -37,7 +38,18 @@ public class MoveToPosition : MonoBehaviour
 			if (OnFinishedMove != null)
 				OnFinishedMove(MyTr);
 
-			Destroy(this);
+			if (ReverseOnFinished)
+			{
+				Vector3 newStart = EndPos;
+				EndPos = StartPos;
+				StartPos = newStart;
+
+				T = 0.0f;
+			}
+			else
+			{
+				Destroy(this);
+			}
 		}
 	}
 }

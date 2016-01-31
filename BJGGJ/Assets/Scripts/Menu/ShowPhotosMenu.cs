@@ -10,13 +10,21 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 {
 	private GameObject CreatePhoto(Texture2D photo, float score)
 	{
+		Transform cvTr = cv.transform;
+		Transform buttonTr = cvTr.GetChild(cvTr.childCount - 1);
+
+		buttonTr.SetParent(null, false);
+
 		GameObject photoGO = Instantiate(PhotoPrefab);
-		photoGO.transform.SetParent(cv.transform, false);
+		photoGO.transform.SetParent(cvTr, false);
+
+		buttonTr.SetParent(cvTr, false);
 
 		photoGO.GetComponent<RawImage>().texture = photo;
 
 		score = Mathf.RoundToInt(score * 1000) / 10.0f;
-		photoGO.GetComponentInChildren<Text>().text = score.ToString();
+		foreach (Text t in photoGO.GetComponentsInChildren<Text>())
+			t.text = score.ToString();
 
 		return photoGO;
 	}
@@ -26,6 +34,8 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 	public int NPhotosWide = 5;
 	public float PhotoSpacing = 2.5f;
 
+	public Image DividerImg;
+
 	private Canvas cv;
 
 
@@ -33,11 +43,15 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 	{
 		cv = FindObjectOfType<Canvas>();
 		StartCoroutine(RunSceneCoroutine());
+
+		DividerImg.sprite = GameController.GetScreenDivider(GameController.PhotosByPlayer.Count);
 	}
 
 
 	public void OnButton_MainMenu()
 	{
+		AudioSource.PlayClipAtPoint(Sounds.Instance.UIClick, Vector3.zero);
+
 		GameController.PhotosByPlayer.Clear();
 		GameController.PhotoScoresByPlayer.Clear();
 
@@ -47,6 +61,18 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 
 	public System.Collections.IEnumerator RunSceneCoroutine()
 	{
+		DividerImg.gameObject.SetActive(false);
+		DividerImg.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left,
+															   0.0f,
+															   cv.pixelRect.width);
+
+		yield return null;
+		
+		DividerImg.rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top,
+															   0.0f,
+															   cv.pixelRect.height);
+		DividerImg.gameObject.SetActive(true);
+
 		yield return null;
 
 		Rect pixelR = cv.pixelRect;
@@ -59,7 +85,7 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 			if (nPhotos > 0)
 			{
 				//Get the pixel-coordinates rectangle for this player's view.
-				Rect r = GameController.GetScreenRect(i, playerRects.Length);
+				Rect r = GameController.GetScreenRectFlipY(i, playerRects.Length);
 				r = new Rect(Mathf.Lerp(pixelR.xMin, pixelR.xMax, r.x),
 							 Mathf.Lerp(pixelR.yMin, pixelR.yMax, r.y),
 							 r.width * pixelR.width,
@@ -68,19 +94,24 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 
 				//Get the scale factor for the photos to fit.
 
-				int nPhotosWide = Mathf.Min(NPhotosWide, nPhotos);
-				float photoWidth = (r.width / (float)nPhotosWide) -
-								   ((nPhotos + 1) * PhotoSpacing);
+				int nPhotosWide = Mathf.Min(NPhotosWide, nPhotos),
+					nPhotosTall = (nPhotos / nPhotosWide) +
+									(nPhotos % nPhotosWide == 0 ?
+										0 :
+										1);
+				float photoWidth = (r.width - PhotoSpacing - (PhotoSpacing * nPhotosWide)) / (float)nPhotosWide;
 				float photoScale = photoWidth / (float)GameController.PhotosByPlayer[i][0].width;
 				float photoHeight = GameController.PhotosByPlayer[i][0].height * photoScale;
 
-				if (photoHeight > (r.height - PhotoSpacing - PhotoSpacing))
+				//Make sure they don't extend too far vertically.
+				float fullYExtents = PhotoSpacing + (nPhotosTall * (photoHeight + PhotoSpacing));
+				if (fullYExtents > r.height)
 				{
-					float scale = (r.height - PhotoSpacing - PhotoSpacing) / photoHeight;
+					photoHeight = (r.height - PhotoSpacing - (PhotoSpacing * nPhotosTall)) / (float)nPhotosTall;
+					photoScale = photoHeight / (float)GameController.PhotosByPlayer[i][0].height;
+					photoWidth = GameController.PhotosByPlayer[i][0].width * photoScale;
 
-					photoWidth *= scale;
-					photoHeight *= scale;
-					photoScale *= scale;
+					fullYExtents = PhotoSpacing + (nPhotosTall * (photoHeight + PhotoSpacing));
 				}
 
 				
@@ -89,6 +120,7 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 				{
 					GameObject photo = CreatePhoto(GameController.PhotosByPlayer[i][j],
 												   GameController.PhotoScoresByPlayer[i][j]);
+					AudioSource.PlayClipAtPoint(Sounds.Instance.PhotoFlip, Vector3.zero);
 					photo.SetActive(false);
 
 					yield return null;

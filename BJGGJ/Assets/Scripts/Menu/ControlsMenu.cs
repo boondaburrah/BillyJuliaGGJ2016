@@ -19,10 +19,12 @@ public class ControlsMenu : Singleton<ControlsMenu>
 
 	public void OnButton_Back()
 	{
+		AudioSource.PlayClipAtPoint(Sounds.Instance.UIClick, Vector3.zero);
 		UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
 	}
 	public void OnButton_Done()
 	{
+		AudioSource.PlayClipAtPoint(Sounds.Instance.UIClick, Vector3.zero);
 		UnityEngine.SceneManagement.SceneManager.LoadScene("Match Scene");
 	}
 
@@ -39,13 +41,8 @@ public class ControlsMenu : Singleton<ControlsMenu>
 	void Update()
 	{
 		timeLeft -= Time.deltaTime;
-
-
 		if (timeLeft <= 0.0f)
 		{
-			if (InputManager.Instance.JumpInput[2])
-				Debug.Log("Jump");
-
 			for (int i = 0; i < InputManager.MaxPlayers; ++i)
 			{
 				if (!PlayerControls.Contains(i) &&
@@ -54,6 +51,7 @@ public class ControlsMenu : Singleton<ControlsMenu>
 					 InputManager.Instance.TakePhotoInput[i] ||
 					 InputManager.Instance.JumpInput[i]))
 				{
+					AudioSource.PlayClipAtPoint(Sounds.Instance.UIClick, Vector3.zero);
 					timeLeft = TimeBetweenInputs;
 					StartCoroutine(AddPlayerCoroutine(i));
 
