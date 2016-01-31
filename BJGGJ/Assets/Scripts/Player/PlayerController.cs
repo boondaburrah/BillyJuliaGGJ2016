@@ -43,6 +43,8 @@ public class PlayerController : MonoBehaviour
 	public int RaycastsPerSide = 5;
 	public LayerMask CameraRaycastLayers;
 
+	public AudioClip JumpSound;
+
 
 	[NonSerialized]
 	public bool CanTakePhotos = true;
@@ -100,6 +102,7 @@ public class PlayerController : MonoBehaviour
 			if (IsJumping)
 			{
 				GravitySpeed = JumpSpeed;
+				MultiAudioListener.Instance.PlayClip(JumpSound, Vector3.zero);
 			}
 		}
 	}
@@ -134,6 +137,8 @@ public class PlayerController : MonoBehaviour
 		PhotoReticule.gameObject.SetActive(false);
 		PolaroidObj.gameObject.SetActive(true);
 		PolaroidObj.material.mainTexture = photo;
+		
+		MultiAudioListener.Instance.PlayClip(Sounds.Instance.TakePhoto, Vector3.zero);
 
 
 		//Cast rays to see how exposed the players are in the photo.

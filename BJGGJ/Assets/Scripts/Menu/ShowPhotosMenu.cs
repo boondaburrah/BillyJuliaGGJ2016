@@ -16,7 +16,8 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 		photoGO.GetComponent<RawImage>().texture = photo;
 
 		score = Mathf.RoundToInt(score * 1000) / 10.0f;
-		photoGO.GetComponentInChildren<Text>().text = score.ToString();
+		foreach (Text t in photoGO.GetComponentsInChildren<Text>())
+			t.text = score.ToString();
 
 		return photoGO;
 	}
@@ -38,6 +39,8 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 
 	public void OnButton_MainMenu()
 	{
+		AudioSource.PlayClipAtPoint(Sounds.Instance.UIClick, Vector3.zero);
+
 		GameController.PhotosByPlayer.Clear();
 		GameController.PhotoScoresByPlayer.Clear();
 
@@ -59,7 +62,7 @@ public class ShowPhotosMenu : Singleton<ShowPhotosMenu>
 			if (nPhotos > 0)
 			{
 				//Get the pixel-coordinates rectangle for this player's view.
-				Rect r = GameController.GetScreenRect(i, playerRects.Length);
+				Rect r = GameController.GetScreenRectFlipY(i, playerRects.Length);
 				r = new Rect(Mathf.Lerp(pixelR.xMin, pixelR.xMax, r.x),
 							 Mathf.Lerp(pixelR.yMin, pixelR.yMax, r.y),
 							 r.width * pixelR.width,

@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Shake : MonoBehaviour
 {
-	private static float[] randVals = new float[3] { 1231.1231f, 431.1231f, 6254.5135f },
-						   randVals2 = new float[3] { 423.123f, 71.234f, 986.128f };
+	private static float[] randVals = new float[3] { 423.123f, 71.234f, 986.128f };
 
 	
 	public delegate void ShakeFinishedDelegate(Transform objTr);
@@ -18,6 +17,8 @@ public class Shake : MonoBehaviour
 	public float ShakeTime = 0.5f;
 
 	public Vector3 PerAxisMultiplier = Vector3.one;
+
+	public Vector3 ShakePeriod = new Vector3(1231.1231f, 431.1231f, 6254.5135f);
 
 
 	[NonSerialized]
@@ -53,14 +54,14 @@ public class Shake : MonoBehaviour
 
 		float t = 1.0f - (TimeLeft / ShakeTime);
 		float strength = StrengthOverTime.Evaluate(t);
-		Vector3 newShakeDelta = new Vector3(Mathf.Sin((Time.timeSinceLevelLoad * randVals[0]) +
-													  randVals2[0]) *
+		Vector3 newShakeDelta = new Vector3(Mathf.Sin((Time.timeSinceLevelLoad * ShakePeriod[0]) +
+													  randVals[0]) *
 											PerAxisMultiplier.x,
-											Mathf.Cos((Time.timeSinceLevelLoad * randVals[1]) +
-													  randVals2[1]) *
+											Mathf.Cos((Time.timeSinceLevelLoad * ShakePeriod[1]) +
+													  randVals[1]) *
 											PerAxisMultiplier.y,
-											Mathf.Sin((Time.timeSinceLevelLoad * randVals[2]) +
-													  randVals2[2]) *
+											Mathf.Sin((Time.timeSinceLevelLoad * ShakePeriod[2]) +
+													  randVals[2]) *
 											PerAxisMultiplier.z);
 		newShakeDelta *= strength;
 
